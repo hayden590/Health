@@ -38,17 +38,23 @@ export function HeatmapCalendar({ completions, color, weeks = 18 }: HeatmapCalen
   return (
     <View>
       <View style={styles.monthRow}>
-        {monthMarkers.map((label, i) => (
-          <Text
-            key={i}
-            style={[
-              typography.label,
-              { width: CELL_SIZE + CELL_GAP, fontSize: 9, color: colors.textTertiary },
-            ]}
-          >
-            {label}
-          </Text>
-        ))}
+        {monthMarkers.map((label, i) =>
+          // Positioned rather than laid out in flow, so a three-letter month
+          // isn't squeezed into the width of one day cell.
+          label ? (
+            <Text
+              key={i}
+              numberOfLines={1}
+              style={[
+                typography.label,
+                styles.monthLabel,
+                { color: colors.textTertiary, left: i * (CELL_SIZE + CELL_GAP) },
+              ]}
+            >
+              {label}
+            </Text>
+          ) : null
+        )}
       </View>
       <View style={[styles.grid, { marginTop: spacing.xs }]}>
         {columns.map((column, ci) => (
@@ -81,7 +87,8 @@ export function HeatmapCalendar({ completions, color, weeks = 18 }: HeatmapCalen
 }
 
 const styles = StyleSheet.create({
-  monthRow: { flexDirection: "row" },
+  monthRow: { height: 12 },
+  monthLabel: { fontSize: 9, position: "absolute", top: 0 },
   grid: { flexDirection: "row" },
   cell: {
     width: CELL_SIZE,

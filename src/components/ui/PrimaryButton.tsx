@@ -39,12 +39,12 @@ export function PrimaryButton({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isOutline || isGhost ? colors.accent : "#03211E"} />
+        <ActivityIndicator color={isOutline || isGhost ? colors.accent : colors.onAccent} />
       ) : (
         <Text
           style={[
             typography.bodyMedium,
-            { color: isOutline || isGhost ? colors.accent : "#03211E" },
+            { color: isOutline || isGhost ? colors.accent : colors.onAccent },
           ]}
         >
           {label}

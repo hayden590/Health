@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 import { Card } from "@/components/ui/Card";
+import { CheckButton } from "@/components/ui/CheckButton";
 import { useTheme } from "@/theme/useTheme";
 import type { HabitWithStats } from "@/types";
 import { HeatmapCalendar } from "./HeatmapCalendar";
@@ -26,23 +26,7 @@ export function HabitListItem({ habit, onToggleToday, onPress }: HabitListItemPr
             🔥 {habit.currentStreak} day streak · best {habit.bestStreak}
           </Text>
         </View>
-        <Pressable
-          onPress={onToggleToday}
-          hitSlop={10}
-          style={[
-            styles.checkButton,
-            {
-              backgroundColor: habit.completedToday ? accentColor : "transparent",
-              borderColor: accentColor,
-            },
-          ]}
-        >
-          <Ionicons
-            name="checkmark"
-            size={20}
-            color={habit.completedToday ? "#03211E" : accentColor}
-          />
-        </Pressable>
+        <CheckButton checked={habit.completedToday} color={accentColor} onPress={onToggleToday} />
       </View>
 
       <View style={{ marginTop: spacing.lg }}>
@@ -55,12 +39,4 @@ export function HabitListItem({ habit, onToggleToday, onPress }: HabitListItemPr
 const styles = StyleSheet.create({
   headerRow: { flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" },
   titleGroup: { flex: 1, marginRight: 12 },
-  checkButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1.5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });

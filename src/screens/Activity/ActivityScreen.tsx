@@ -60,7 +60,11 @@ export function ActivityScreen() {
               colorTo="#FFC15C"
               trackColor={colors.surfaceAlt}
             >
-              <Text style={[typography.display, { color: colors.textPrimary }]}>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={[typography.statLarge, { color: colors.textPrimary, maxWidth: 100 }]}
+              >
                 {steps.toLocaleString()}
               </Text>
               <Text style={[typography.caption, { color: colors.textSecondary }]}>

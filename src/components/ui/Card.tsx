@@ -40,10 +40,7 @@ export function Card({ children, onPress, padded = true, style, ...rest }: CardP
 const styles = StyleSheet.create({
   base: {
     borderWidth: StyleSheet.hairlineWidth,
-    shadowColor: "#0B1A1D",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.04,
-    shadowRadius: 16,
+    boxShadow: "0px 6px 16px rgba(11, 26, 29, 0.04)",
     elevation: 1,
   },
   pressed: {

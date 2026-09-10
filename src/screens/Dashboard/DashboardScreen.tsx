@@ -6,6 +6,7 @@ import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { ScreenContainer } from "@/components/ui/ScreenContainer";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useTheme } from "@/theme/useTheme";
 import { useHabitStore } from "@/store/useHabitStore";
 import { useHealthStore } from "@/store/useHealthStore";
@@ -89,11 +90,18 @@ export function DashboardScreen() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />
       }
     >
-      <View style={{ marginBottom: spacing.xl }}>
-        <Text style={[typography.caption, { color: colors.textSecondary }]}>{today}</Text>
-        <Text style={[typography.display, { color: colors.textPrimary, marginTop: spacing.xs }]}>
-          {greeting()}
-        </Text>
+      <View style={[styles.headerRow, { marginBottom: spacing.xl }]}>
+        <View style={styles.headerText}>
+          <Text style={[typography.caption, { color: colors.textSecondary }]}>{today}</Text>
+          <Text
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            style={[typography.display, { color: colors.textPrimary, marginTop: spacing.xs }]}
+          >
+            {greeting()}
+          </Text>
+        </View>
+        <ThemeToggle />
       </View>
 
       <View style={[styles.grid, { marginBottom: spacing.lg }]}>
@@ -141,6 +149,8 @@ export function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerRow: { flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" },
+  headerText: { flex: 1, marginRight: 12 },
   grid: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
   gridItem: { width: "47%", flexGrow: 1 },
 });

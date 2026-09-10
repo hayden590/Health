@@ -93,14 +93,15 @@ export class MockHealthProvider implements HealthDataProvider {
       Math.min(98, Math.round((totalMinutes / 480) * 70 + (deepMinutes / totalMinutes) * 120))
     );
 
+    // Sleep is attributed to the morning the user woke up, so the bedtime that
+    // produced it belongs to the previous evening.
+    const wakeTime = new Date(`${date}T07:${String(rangeFor(`wake-${date}`, 0, 45)).padStart(2, "0")}:00`);
+    const bedtime = new Date(wakeTime.getTime() - (totalMinutes + awakeMinutes) * 60000);
+
     return {
       date,
-      bedtime: `${date}T23:${rangeFor(`bed-${date}`, 0, 59)
-        .toString()
-        .padStart(2, "0")}:00`,
-      wakeTime: `${date}T07:${rangeFor(`wake-${date}`, 0, 45)
-        .toString()
-        .padStart(2, "0")}:00`,
+      bedtime: bedtime.toISOString(),
+      wakeTime: wakeTime.toISOString(),
       totalMinutes,
       stages: {
         lightMinutes: Math.max(0, lightMinutes),

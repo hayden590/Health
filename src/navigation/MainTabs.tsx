@@ -39,7 +39,7 @@ export function MainTabs() {
         ),
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ tabBarLabel: "Home" }} />
       <Tab.Screen name="Habits" component={HabitsScreen} />
       <Tab.Screen name="Sleep" component={SleepScreen} />
       <Tab.Screen name="Activity" component={ActivityScreen} />

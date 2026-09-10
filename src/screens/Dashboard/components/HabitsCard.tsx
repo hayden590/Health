@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 import { DashboardCardShell } from "./DashboardCardShell";
+import { CheckButton } from "@/components/ui/CheckButton";
 import { useTheme } from "@/theme/useTheme";
 import type { HabitWithStats } from "@/types";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -27,15 +27,12 @@ export function HabitsCard({ habits, onToggle, onPress }: HabitsCardProps) {
       ) : (
         <View>
           {habits.slice(0, 4).map((habit) => (
-            <Pressable
-              key={habit.id}
-              onPress={() => onToggle(habit.id)}
-              style={[styles.habitRow, { marginBottom: spacing.xs }]}
-            >
-              <Ionicons
-                name={habit.completedToday ? "checkmark-circle" : "ellipse-outline"}
-                size={18}
-                color={habit.completedToday ? colors.habits : colors.textTertiary}
+            <View key={habit.id} style={[styles.habitRow, { marginBottom: spacing.xs }]}>
+              <CheckButton
+                checked={habit.completedToday}
+                color={colors.habits}
+                size={20}
+                onPress={() => onToggle(habit.id)}
               />
               <Text
                 numberOfLines={1}
@@ -63,7 +60,7 @@ export function HabitsCard({ habits, onToggle, onPress }: HabitsCardProps) {
                   </Text>
                 </View>
               ) : null}
-            </Pressable>
+            </View>
           ))}
         </View>
       )}

@@ -63,7 +63,7 @@ export function BarcodeScannerScreen() {
         onBarcodeScanned={onScanned}
       />
 
-      <View style={styles.overlay} pointerEvents="box-none">
+      <View style={styles.overlay}>
         <View style={[styles.topBar, { paddingTop: spacing.xxl }]}>
           <Pressable onPress={() => navigation.goBack()} hitSlop={12}>
             <Ionicons name="close" size={28} color="#fff" />
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: "center",
     justifyContent: "space-between",
+    pointerEvents: "box-none",
   },
   topBar: {
     flexDirection: "row",

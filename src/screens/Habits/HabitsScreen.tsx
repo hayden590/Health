@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -11,7 +11,9 @@ import { LoadingState } from "@/components/ui/LoadingState";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { useTheme } from "@/theme/useTheme";
 import { useHabitStore } from "@/store/useHabitStore";
+import { StreakCelebration, isStreakMilestone } from "@/components/ui/StreakCelebration";
 import type { MainTabParamList, RootStackParamList } from "@/navigation/types";
+import { todayIso } from "@/utils/date";
 import { HabitListItem } from "./components/HabitListItem";
 
 type HabitsNavigation = CompositeNavigationProp<
@@ -28,6 +30,7 @@ export function HabitsScreen() {
   const hasLoadedOnce = useHabitStore((s) => s.hasLoadedOnce);
   const load = useHabitStore((s) => s.load);
   const toggleDate = useHabitStore((s) => s.toggleDate);
+  const [celebration, setCelebration] = useState<string | null>(null);
 
   useEffect(() => {
     if (!hasLoadedOnce) load();
@@ -40,6 +43,14 @@ export function HabitsScreen() {
   );
 
   const totalStreakDays = habits.reduce((sum, h) => sum + h.currentStreak, 0);
+
+  const onToggleToday = async (habitId: string) => {
+    await toggleDate(habitId, todayIso());
+    const updated = useHabitStore.getState().habits.find((h) => h.id === habitId);
+    if (updated?.completedToday && isStreakMilestone(updated.currentStreak)) {
+      setCelebration(`${updated.currentStreak}-day streak on ${updated.name}!`);
+    }
+  };
 
   return (
     <ScreenContainer>
@@ -66,11 +77,13 @@ export function HabitsScreen() {
           <HabitListItem
             key={habit.id}
             habit={habit}
-            onToggleToday={() => toggleDate(habit.id, new Date().toISOString().slice(0, 10))}
+            onToggleToday={() => onToggleToday(habit.id)}
             onPress={() => navigation.navigate("HabitDetail", { habitId: habit.id })}
           />
         ))
       )}
+
+      <StreakCelebration message={celebration} onDismiss={() => setCelebration(null)} />
     </ScreenContainer>
   );
 }
