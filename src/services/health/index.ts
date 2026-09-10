@@ -21,12 +21,21 @@ export function getHealthDataProvider(): HealthDataProvider {
   if (cachedProvider) return cachedProvider;
 
   if (USE_REAL_HEALTH_SOURCE) {
-    if (Platform.OS === "ios") {
-      const { HealthKitProvider } = require("./HealthKitProvider");
-      cachedProvider = new HealthKitProvider();
-    } else if (Platform.OS === "android") {
-      const { HealthConnectProvider } = require("./HealthConnectProvider");
-      cachedProvider = new HealthConnectProvider();
+    // These imports touch native modules as a side effect — Health Connect
+    // calls TurboModuleRegistry.getEnforcing, which throws outright when the
+    // module isn't in the binary (Expo Go, or a build without the config
+    // plugin). A throw here just means "no real source available", so swallow
+    // it and let the mock provider take over.
+    try {
+      if (Platform.OS === "ios") {
+        const { HealthKitProvider } = require("./HealthKitProvider");
+        cachedProvider = new HealthKitProvider();
+      } else if (Platform.OS === "android") {
+        const { HealthConnectProvider } = require("./HealthConnectProvider");
+        cachedProvider = new HealthConnectProvider();
+      }
+    } catch {
+      cachedProvider = null;
     }
   }
 
