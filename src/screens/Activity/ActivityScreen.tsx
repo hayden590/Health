@@ -53,18 +53,14 @@ export function ActivityScreen() {
         <>
           <Card style={{ marginBottom: spacing.lg, alignItems: "center" }}>
             <ProgressRing
-              size={140}
+              size={168}
               strokeWidth={14}
               progress={steps / STEP_GOAL}
               colorFrom={colors.activity}
               colorTo="#FFC15C"
               trackColor={colors.surfaceAlt}
             >
-              <Text
-                numberOfLines={1}
-                adjustsFontSizeToFit
-                style={[typography.statLarge, { color: colors.textPrimary, maxWidth: 100 }]}
-              >
+              <Text numberOfLines={1} style={[typography.statLarge, { color: colors.textPrimary }]}>
                 {steps.toLocaleString()}
               </Text>
               <Text style={[typography.caption, { color: colors.textSecondary }]}>

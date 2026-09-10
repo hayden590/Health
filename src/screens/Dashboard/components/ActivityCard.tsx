@@ -20,7 +20,7 @@ export function ActivityCard({ activity, onPress }: ActivityCardProps) {
     <DashboardCardShell icon="walk" accentColor={colors.activity} title="Activity" onPress={onPress}>
       <View style={styles.row}>
         <ProgressRing
-          size={64}
+          size={54}
           strokeWidth={7}
           progress={progress}
           colorFrom={colors.activity}

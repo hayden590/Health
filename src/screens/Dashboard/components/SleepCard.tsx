@@ -18,7 +18,7 @@ export function SleepCard({ sleep, onPress }: SleepCardProps) {
     <DashboardCardShell icon="moon" accentColor={colors.sleep} title="Sleep" onPress={onPress}>
       <View style={styles.row}>
         <ProgressRing
-          size={64}
+          size={54}
           strokeWidth={7}
           progress={score / 100}
           colorFrom={colors.sleep}
@@ -30,7 +30,7 @@ export function SleepCard({ sleep, onPress }: SleepCardProps) {
           </Text>
         </ProgressRing>
         <View style={{ marginLeft: spacing.md, flex: 1 }}>
-          <Text style={[typography.statMedium, { color: colors.textPrimary }]}>
+          <Text numberOfLines={1} style={[typography.statMedium, { color: colors.textPrimary }]}>
             {sleep ? minutesToHoursLabel(sleep.totalMinutes) : "–"}
           </Text>
           <Text style={[typography.caption, { color: colors.textSecondary }]}>last night</Text>

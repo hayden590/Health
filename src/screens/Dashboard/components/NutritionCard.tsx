@@ -20,7 +20,7 @@ export function NutritionCard({ entries, onPress }: NutritionCardProps) {
     <DashboardCardShell icon="nutrition" accentColor={colors.nutrition} title="Nutrition" onPress={onPress}>
       <View style={styles.row}>
         <ProgressRing
-          size={64}
+          size={54}
           strokeWidth={7}
           progress={calories / CALORIE_GOAL}
           colorFrom={colors.nutrition}
