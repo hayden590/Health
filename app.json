@@ -1,0 +1,65 @@
+{
+  "expo": {
+    "name": "Vitalis",
+    "slug": "vitalis-health",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "vitalis",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vitalis.health",
+      "infoPlist": {
+        "NSHealthShareUsageDescription": "Vitalis reads your steps, sleep, heart rate, and workouts from Apple Health so your dashboard stays in sync with your Apple Watch and other connected devices.",
+        "NSHealthUpdateUsageDescription": "Vitalis does not write data back to Apple Health.",
+        "NSCameraUsageDescription": "Vitalis uses your camera to scan food barcodes for quick nutrition logging."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0F10",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.vitalis.health",
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.health.READ_STEPS",
+        "android.permission.health.READ_SLEEP",
+        "android.permission.health.READ_HEART_RATE",
+        "android.permission.health.READ_EXERCISE",
+        "android.permission.health.READ_DISTANCE",
+        "android.permission.health.READ_ACTIVE_CALORIES_BURNED"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Vitalis uses your camera to scan food barcodes for quick nutrition logging."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#3DD6C4"
+        }
+      ],
+      [
+        "react-native-health",
+        {
+          "healthSharePermission": "Vitalis reads your steps, sleep, heart rate, and workouts from Apple Health so your dashboard stays in sync with your Apple Watch and other connected devices."
+        }
+      ],
+      "react-native-health-connect"
+    ]
+  }
+}
