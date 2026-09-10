@@ -1,4 +1,4 @@
-import { NavigationContainer, DarkTheme, DefaultTheme } from "@react-navigation/native";
+import { NavigationContainer, DarkTheme, DefaultTheme, type LinkingOptions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTheme } from "@/theme/useTheme";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
@@ -11,6 +11,29 @@ import { BarcodeScannerScreen } from "@/screens/Nutrition/BarcodeScannerScreen";
 import { AddFoodManuallyScreen } from "@/screens/Nutrition/AddFoodManuallyScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ["vitalis://"],
+  config: {
+    screens: {
+      Onboarding: "onboarding",
+      MainTabs: {
+        screens: {
+          Dashboard: "",
+          Habits: "habits",
+          Sleep: "sleep",
+          Activity: "activity",
+          Nutrition: "nutrition",
+          Trends: "trends",
+        },
+      },
+      HabitDetail: "habit/:habitId",
+      AddHabit: "habit/new",
+      BarcodeScanner: "scan",
+      AddFoodManually: "food/new",
+    },
+  },
+};
 
 export function RootNavigator() {
   const { colors, isDark } = useTheme();
@@ -29,7 +52,7 @@ export function RootNavigator() {
   };
 
   return (
-    <NavigationContainer theme={navTheme}>
+    <NavigationContainer theme={navTheme} linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={completed ? "MainTabs" : "Onboarding"}>
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="MainTabs" component={MainTabs} />

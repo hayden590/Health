@@ -52,12 +52,22 @@ export interface NutritionEntry {
   name: string;
   brand: string | null;
   barcode: string | null;
+  /** Macros for the portion actually eaten. */
   calories: number;
   proteinG: number;
   carbsG: number;
   fatG: number;
   servingDescription: string | null;
   createdAt: IsoDateTime;
+  /** Portion size in `unit`, and the per-100 basis it was scaled from. */
+  amount: number | null;
+  unit: "g" | "ml" | null;
+  per100: {
+    calories: number;
+    proteinG: number;
+    carbsG: number;
+    fatG: number;
+  } | null;
 }
 
 export interface SleepStageBreakdown {

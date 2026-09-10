@@ -13,6 +13,12 @@ interface NutritionRow {
   fat_g: number;
   serving_description: string | null;
   created_at: string;
+  amount: number | null;
+  unit: string | null;
+  calories_per_100: number | null;
+  protein_per_100: number | null;
+  carbs_per_100: number | null;
+  fat_per_100: number | null;
 }
 
 function fromRow(row: NutritionRow): NutritionEntry {
@@ -28,6 +34,17 @@ function fromRow(row: NutritionRow): NutritionEntry {
     fatG: row.fat_g,
     servingDescription: row.serving_description,
     createdAt: row.created_at,
+    amount: row.amount,
+    unit: row.unit === "ml" ? "ml" : row.unit === "g" ? "g" : null,
+    per100:
+      row.calories_per_100 === null
+        ? null
+        : {
+            calories: row.calories_per_100,
+            proteinG: row.protein_per_100 ?? 0,
+            carbsG: row.carbs_per_100 ?? 0,
+            fatG: row.fat_per_100 ?? 0,
+          },
   };
 }
 
@@ -59,6 +76,9 @@ export interface AddNutritionEntryInput {
   carbsG: number;
   fatG: number;
   servingDescription?: string | null;
+  amount?: number | null;
+  unit?: "g" | "ml" | null;
+  per100?: { calories: number; proteinG: number; carbsG: number; fatG: number } | null;
 }
 
 export async function addNutritionEntry(input: AddNutritionEntryInput): Promise<NutritionEntry> {
@@ -68,8 +88,10 @@ export async function addNutritionEntry(input: AddNutritionEntryInput): Promise<
 
   await db.runAsync(
     `INSERT INTO nutrition_entries
-      (id, date, name, brand, barcode, calories, protein_g, carbs_g, fat_g, serving_description, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      (id, date, name, brand, barcode, calories, protein_g, carbs_g, fat_g,
+       serving_description, created_at, amount, unit,
+       calories_per_100, protein_per_100, carbs_per_100, fat_per_100)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
     [
       id,
       input.date,
@@ -82,6 +104,12 @@ export async function addNutritionEntry(input: AddNutritionEntryInput): Promise<
       input.fatG,
       input.servingDescription ?? null,
       createdAt,
+      input.amount ?? null,
+      input.unit ?? null,
+      input.per100?.calories ?? null,
+      input.per100?.proteinG ?? null,
+      input.per100?.carbsG ?? null,
+      input.per100?.fatG ?? null,
     ]
   );
 
@@ -97,6 +125,9 @@ export async function addNutritionEntry(input: AddNutritionEntryInput): Promise<
     fatG: input.fatG,
     servingDescription: input.servingDescription ?? null,
     createdAt,
+    amount: input.amount ?? null,
+    unit: input.unit ?? null,
+    per100: input.per100 ?? null,
   };
 }
 

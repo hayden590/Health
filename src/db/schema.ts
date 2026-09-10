@@ -1,7 +1,7 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 
 export const DB_NAME = "wellbeing.db";
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 const CREATE_STATEMENTS = `
 CREATE TABLE IF NOT EXISTS habits (
@@ -44,7 +44,13 @@ CREATE TABLE IF NOT EXISTS nutrition_entries (
   carbs_g REAL NOT NULL DEFAULT 0,
   fat_g REAL NOT NULL DEFAULT 0,
   serving_description TEXT,
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  amount REAL,
+  unit TEXT,
+  calories_per_100 REAL,
+  protein_per_100 REAL,
+  carbs_per_100 REAL,
+  fat_per_100 REAL
 );
 CREATE INDEX IF NOT EXISTS idx_nutrition_date ON nutrition_entries(date);
 
@@ -60,15 +66,39 @@ CREATE TABLE IF NOT EXISTS health_cache (
 );
 `;
 
+// Added in v2 so a logged food keeps the per-100g basis it was scaled from,
+// which is what lets a portion be edited after the fact.
+const V2_COLUMNS = [
+  "amount REAL",
+  "unit TEXT",
+  "calories_per_100 REAL",
+  "protein_per_100 REAL",
+  "carbs_per_100 REAL",
+  "fat_per_100 REAL",
+];
+
 export async function runMigrations(db: SQLiteDatabase): Promise<void> {
   await db.execAsync("PRAGMA journal_mode = WAL;");
   await db.execAsync("PRAGMA foreign_keys = ON;");
 
   const row = await db.getFirstAsync<{ user_version: number }>("PRAGMA user_version;");
   const currentVersion = row?.user_version ?? 0;
+  if (currentVersion >= SCHEMA_VERSION) return;
 
-  if (currentVersion < SCHEMA_VERSION) {
-    await db.execAsync(CREATE_STATEMENTS);
-    await db.execAsync(`PRAGMA user_version = ${SCHEMA_VERSION};`);
+  await db.execAsync(CREATE_STATEMENTS);
+
+  if (currentVersion === 1) {
+    const existing = await db.getAllAsync<{ name: string }>(
+      "PRAGMA table_info(nutrition_entries);"
+    );
+    const names = new Set(existing.map((c) => c.name));
+    for (const column of V2_COLUMNS) {
+      const [name] = column.split(" ");
+      if (!names.has(name)) {
+        await db.execAsync(`ALTER TABLE nutrition_entries ADD COLUMN ${column};`);
+      }
+    }
   }
+
+  await db.execAsync(`PRAGMA user_version = ${SCHEMA_VERSION};`);
 }

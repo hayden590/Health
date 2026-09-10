@@ -18,7 +18,7 @@ export function FoodLogItem({ entry, onDelete }: FoodLogItemProps) {
           {entry.name}
         </Text>
         <Text style={[typography.caption, { color: colors.textSecondary }]}>
-          {entry.brand ? `${entry.brand} · ` : ""}
+          {entry.amount ? `${entry.amount} ${entry.unit ?? "g"} · ` : ""}
           {Math.round(entry.calories)} kcal · P{Math.round(entry.proteinG)} C{Math.round(entry.carbsG)} F
           {Math.round(entry.fatG)}
         </Text>
